@@ -36,18 +36,8 @@ public class UsuarioService {
 
     }
 
-    public UsuarioDto updateUsuarios(Long numero, UsuarioDto usuarioDto) {
-
-        Optional<Documento> documento = documentoRepository.findByNumero(numero);
-        if (documento.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-        Optional<Usuario> usuario = usuarioRepository.findByDocumento(documento.get());
-        if (usuario.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-
-        Usuario usuarioUpdate = usuario.get();
+    public UsuarioDto updateUsuarios(Long numero, UsuarioDto usuarioDto)throws EntityNotFoundException {
+        Usuario usuarioUpdate = buscaUsuario(numero);
         usuarioUpdate.setNome(usuarioDto.nome());
         usuarioUpdate.setEmail(usuarioDto.email());
         usuarioUpdate.setPassword(usuarioDto.password());
@@ -56,19 +46,26 @@ public class UsuarioService {
         return usuarioMapper.toDto(usuarioUpdate);
     }
 
+    public void updateCarteiraUsuario(Double valor, Long depositario, Long destinatario) throws EntityNotFoundException{
+        Usuario usuarioDepositario = buscaUsuario(depositario);
+        Usuario usuarioDestinatario = buscaUsuario(destinatario);
+
+        usuarioDepositario.getCarteira().setSaldo(usuarioDepositario.getCarteira().getSaldo() - valor);
+        usuarioDestinatario.getCarteira().setSaldo(usuarioDestinatario.getCarteira().getSaldo() + valor);
+        usuarioRepository.save(usuarioDepositario);
+        usuarioRepository.save(usuarioDestinatario);
+
+    }
+
     public void deleteUsuario(Long numero) throws EntityNotFoundException {
-        Optional<Documento> documento = documentoRepository.findByNumero(numero);
-        if (documento.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-        Optional<Usuario> usuario = usuarioRepository.findByDocumento(documento.get());
-        if (usuario.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-        usuarioRepository.delete(usuario.get());
+        usuarioRepository.delete(buscaUsuario(numero));
     }
 
     public UsuarioDto getUsuario(Long numero) throws EntityNotFoundException {
+        return usuarioMapper.toDto(buscaUsuario(numero));
+    }
+
+    protected Usuario buscaUsuario(Long numero) {
         Optional<Documento> documento = documentoRepository.findByNumero(numero);
         if (documento.isEmpty()) {
             throw new EntityNotFoundException();
@@ -77,7 +74,7 @@ public class UsuarioService {
         if (usuario.isEmpty()) {
             throw new EntityNotFoundException();
         }
-        return usuarioMapper.toDto(usuario.get());
+        return usuario.get();
     }
 
     public List<UsuarioDto> getAllUsuario() {

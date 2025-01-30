@@ -34,8 +34,10 @@ public class Usuario implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CARTEIRA_ID", referencedColumnName = "ID")
     private Carteira carteira;
-    @OneToMany(mappedBy = "idDepositario")
-    private List<Transacao> transacoes = new ArrayList<>();
+    @OneToMany(mappedBy = "depositario")
+    private List<Transacao> transacoesDepositario = new ArrayList<>();
+    @OneToMany(mappedBy = "destinatario")
+    private List<Transacao> transacoesDestinatario = new ArrayList<>();
 
 
 }

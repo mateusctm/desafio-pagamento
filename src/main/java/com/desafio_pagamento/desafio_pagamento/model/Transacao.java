@@ -11,10 +11,12 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+    @Column(name = "VALOR")
+    private Double valor;
     @ManyToOne()
     @JoinColumn(name = "USUARIO_DEPOSITARIO_ID", referencedColumnName = "ID")
-    private Usuario idDepositario;
-   @OneToOne
-   @JoinColumn(name = "USUARIO_DESTINATARIO_ID")
-    private Usuario idDestinatario;
+    private Usuario depositario;
+    @ManyToOne
+    @JoinColumn(name = "USUARIO_DESTINATARIO_ID", referencedColumnName = "ID")
+    private Usuario destinatario;
 }
