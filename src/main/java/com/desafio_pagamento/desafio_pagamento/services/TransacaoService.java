@@ -1,7 +1,9 @@
 package com.desafio_pagamento.desafio_pagamento.services;
 
+import com.desafio_pagamento.desafio_pagamento.dto.AuthorizeDto;
 import com.desafio_pagamento.desafio_pagamento.dto.TransacaoDto;
 import com.desafio_pagamento.desafio_pagamento.mapper.TransacaoMapper;
+import com.desafio_pagamento.desafio_pagamento.model.StatusAuthorize;
 import com.desafio_pagamento.desafio_pagamento.model.TipoDocumento;
 import com.desafio_pagamento.desafio_pagamento.model.Transacao;
 import com.desafio_pagamento.desafio_pagamento.model.Usuario;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TransacaoService {
@@ -19,7 +22,7 @@ public class TransacaoService {
     @Autowired
     UsuarioService usuarioService;
     @Autowired
-    CarteiraService carteiraService;
+    Authorizeservice authorizeservice;
 
     TransacaoMapper transacaoMapper = TransacaoMapper.TRANSACAO_MAPPER;
 
@@ -27,7 +30,10 @@ public class TransacaoService {
         Transacao transacao = transacaoMapper.toEntity(transacaoDto);
         Usuario depositario = usuarioService.buscaUsuario(transacao.getDepositario().getDocumento().getNumero());
         Usuario destinatario = usuarioService.buscaUsuario(transacao.getDestinatario().getDocumento().getNumero());
-        if (depositario.getCarteira().getSaldo() < transacao.getValor() || depositario.getDocumento().getTipoDocumento().equals(TipoDocumento.CNPJ)) {
+        AuthorizeDto authorizeDto = authorizeservice.authorize();
+
+
+        if ((depositario.getCarteira().getSaldo() < transacao.getValor()) || (depositario.getDocumento().getTipoDocumento().equals(TipoDocumento.CNPJ)) || (!Objects.equals(authorizeDto.status(), StatusAuthorize.success))) {
             throw new RuntimeException();
         }
         usuarioService.updateCarteiraUsuario(transacao.getValor(), depositario.getDocumento().getNumero(), destinatario.getDocumento().getNumero());
