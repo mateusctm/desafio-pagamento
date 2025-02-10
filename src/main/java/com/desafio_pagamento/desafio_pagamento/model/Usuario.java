@@ -17,9 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 public class Usuario implements Serializable {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "USUARIO_ID")
     private Long id;
     @Column(name = "NOME", nullable = false)
     private String nome;
@@ -38,6 +39,13 @@ public class Usuario implements Serializable {
     private List<Transacao> transacoesDepositario = new ArrayList<>();
     @OneToMany(mappedBy = "destinatario")
     private List<Transacao> transacoesDestinatario = new ArrayList<>();
+
+//    @ManyToMany
+//    @JoinTable(name = "TB_USUARIO_ROLES", joinColumns = @JoinColumn(name = "USUARIO_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+//    private Set<Role> roles = new HashSet<>();
+//    @ManyToMany
+//    @JoinTable(name = "teste", joinColumns = @JoinColumn(name = ))
+//    private List<Transacao> transacoe = new ArrayList<>();
 
 
 }

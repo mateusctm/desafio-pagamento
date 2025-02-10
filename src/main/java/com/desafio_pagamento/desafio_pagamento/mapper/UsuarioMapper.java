@@ -15,8 +15,10 @@ public interface UsuarioMapper {
     UsuarioMapper USUARIO_MAPPER = Mappers.getMapper(UsuarioMapper.class);
 
 
-    @Mapping(target = "transacoes", ignore = true)
+    @Mapping(target = "transacoesDestinatario", ignore = true)
+    @Mapping(target = "transacoesDepositario", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "password", ignore = true)
     Usuario toEntity(UsuarioDto usuarioDto);
 
     UsuarioDto toDto(Usuario usuario);

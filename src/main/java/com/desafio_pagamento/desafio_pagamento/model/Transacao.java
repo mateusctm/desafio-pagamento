@@ -14,9 +14,9 @@ public class Transacao {
     @Column(name = "VALOR")
     private Double valor;
     @ManyToOne()
-    @JoinColumn(name = "USUARIO_DEPOSITARIO_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "USUARIO_DEPOSITARIO_ID", referencedColumnName = "USUARIO_ID")
     private Usuario depositario;
     @ManyToOne
-    @JoinColumn(name = "USUARIO_DESTINATARIO_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "USUARIO_DESTINATARIO_ID", referencedColumnName = "USUARIO_ID")
     private Usuario destinatario;
 }

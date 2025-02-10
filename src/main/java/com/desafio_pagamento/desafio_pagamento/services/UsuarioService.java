@@ -11,6 +11,7 @@ import com.desafio_pagamento.desafio_pagamento.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,9 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private DocumentoRepository documentoRepository;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     private final UsuarioMapper usuarioMapper = UsuarioMapper.USUARIO_MAPPER;
     private final CarteiraMapper carteiraMapper = CarteiraMapper.CARTEIRA_MAPPER;
@@ -30,6 +34,7 @@ public class UsuarioService {
 
     public UsuarioDto criarUsuario(UsuarioDto usuarioDto) throws DataIntegrityViolationException {
         Usuario usuario = usuarioMapper.toEntity(usuarioDto);
+        usuario.setPassword(bCryptPasswordEncoder.encode(usuarioDto.password()));
         Usuario usuariosave = usuarioRepository.save(usuario);
 
         return usuarioMapper.toDto(usuariosave);
@@ -40,7 +45,7 @@ public class UsuarioService {
         Usuario usuarioUpdate = buscaUsuario(numero);
         usuarioUpdate.setNome(usuarioDto.nome());
         usuarioUpdate.setEmail(usuarioDto.email());
-        usuarioUpdate.setPassword(usuarioDto.password());
+        usuarioUpdate.setPassword(bCryptPasswordEncoder.encode(usuarioDto.password()));
         usuarioRepository.save(usuarioUpdate);
 
         return usuarioMapper.toDto(usuarioUpdate);

@@ -5,6 +5,7 @@ import com.desafio_pagamento.desafio_pagamento.services.TransacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class TransacaoCotroller {
     TransacaoService transacaoService;
 
     @PostMapping
-    public ResponseEntity<TransacaoDto> createTransacao(@RequestBody TransacaoDto transacaoDto) {
+    public ResponseEntity<TransacaoDto> createTransacao(@RequestBody TransacaoDto transacaoDto, JwtAuthenticationToken token) {
         try {
             return ResponseEntity.ok(transacaoService.criarTransacao(transacaoDto));
         } catch (RuntimeException e) {
@@ -28,7 +29,7 @@ public class TransacaoCotroller {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransacaoDto>> getAllTransacao() {
+    public ResponseEntity<List<TransacaoDto>> getAllTransacao(JwtAuthenticationToken token) {
         return ResponseEntity.ok(transacaoService.getAllTransacao());
     }
 }

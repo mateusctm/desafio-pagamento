@@ -8,25 +8,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("usuario")
 public class UsuarioCotroller {
 
     @Autowired
     UsuarioService usuarioService;
 
     @GetMapping("/usuarios")
-    public ResponseEntity<List<UsuarioDto>> getUsuarios() {
+    public ResponseEntity<List<UsuarioDto>> getUsuarios(JwtAuthenticationToken token) {
         return ResponseEntity.ok(usuarioService.getAllUsuario());
 
     }
 
     @GetMapping("/{numero}")
-    public ResponseEntity<UsuarioDto> getUsuarioById(@PathVariable Long numero) {
+    public ResponseEntity<UsuarioDto> getUsuarioById(@PathVariable Long numero, JwtAuthenticationToken token) {
         try {
             UsuarioDto usuarioDto = usuarioService.getUsuario(numero);
             return ResponseEntity.ok(usuarioDto);
@@ -50,7 +51,7 @@ public class UsuarioCotroller {
     }
 
     @PutMapping
-    public ResponseEntity<UsuarioDto> updateUsuario(@RequestParam Long numero, @RequestBody @Valid UsuarioDto usuarioDto) {
+    public ResponseEntity<UsuarioDto> updateUsuario(@RequestParam Long numero, @RequestBody @Valid UsuarioDto usuarioDto, JwtAuthenticationToken token) {
         try {
             UsuarioDto usuarioDto1 = usuarioService.updateUsuarios(numero, usuarioDto);
             return ResponseEntity.ok(usuarioDto1);
@@ -62,7 +63,7 @@ public class UsuarioCotroller {
     }
 
     @DeleteMapping("/{numero}")
-    public ResponseEntity<Void> deleteUsuario(@PathVariable Long numero){
+    public ResponseEntity<Void> deleteUsuario(@PathVariable Long numero, JwtAuthenticationToken token){
         try {
             usuarioService.deleteUsuario(numero);
             return ResponseEntity.ok().build();
