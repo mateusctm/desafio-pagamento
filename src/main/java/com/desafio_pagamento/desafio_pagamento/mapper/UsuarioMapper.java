@@ -21,6 +21,8 @@ public interface UsuarioMapper {
     @Mapping(target = "password", ignore = true)
     Usuario toEntity(UsuarioDto usuarioDto);
 
+    @Mapping(target = "roles", source = "roles")
+    @Mapping(target = "roles.", source = "roles")
     UsuarioDto toDto(Usuario usuario);
 
     List<UsuarioDto> toListDto(List<Usuario> usuarios);

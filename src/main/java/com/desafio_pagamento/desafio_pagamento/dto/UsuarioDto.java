@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Set;
+
 public record UsuarioDto(
         @JsonProperty("nome")
         @NotNull
@@ -20,5 +22,7 @@ public record UsuarioDto(
         String password,
         @JsonProperty("carteira")
         @NotNull
-        CarteiraDto carteira) {
+        CarteiraDto carteira,
+        @JsonProperty("roles")
+        Set<RoleDto> roles) {
 }

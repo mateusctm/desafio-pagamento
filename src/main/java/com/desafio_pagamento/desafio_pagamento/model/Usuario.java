@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "TB_USUARIO")
@@ -40,12 +42,8 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "destinatario")
     private List<Transacao> transacoesDestinatario = new ArrayList<>();
 
-//    @ManyToMany
-//    @JoinTable(name = "TB_USUARIO_ROLES", joinColumns = @JoinColumn(name = "USUARIO_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
-//    private Set<Role> roles = new HashSet<>();
-//    @ManyToMany
-//    @JoinTable(name = "teste", joinColumns = @JoinColumn(name = ))
-//    private List<Transacao> transacoe = new ArrayList<>();
-
+    @ManyToMany
+    @JoinTable(name = "TB_USUARIO_ROLES", joinColumns = @JoinColumn(name = "USUARIO_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    private Set<Role> roles = new HashSet<>();
 
 }

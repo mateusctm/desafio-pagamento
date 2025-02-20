@@ -1,5 +1,6 @@
 package com.desafio_pagamento.desafio_pagamento.services;
 
+import com.desafio_pagamento.desafio_pagamento.dto.RoleDto;
 import com.desafio_pagamento.desafio_pagamento.dto.TokenDto;
 import com.desafio_pagamento.desafio_pagamento.dto.UsuarioDto;
 import lombok.AllArgsConstructor;
@@ -19,10 +20,13 @@ public class TokenService {
 
     public TokenDto gerarToken(UsuarioDto usuarioDto) {
 
+        var scope = usuarioDto.roles().stream().map(RoleDto::roleEnun).toArray();
+
         var claims = JwtClaimsSet.builder()
                 .issuer("desafio-pagamento")
                 .subject(usuarioDto.nome())
                 .expiresAt(Instant.now().plusSeconds(300L))
+                .claim("scope", scope)
                 .build();
         String jwt = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
